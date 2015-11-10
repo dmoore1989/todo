@@ -24,6 +24,7 @@ var TodoList = React.createClass({
     return (
       <div>
         { (this.state.list.map(this.listTitles)) }
+        < TodoForm />
       </div>
     );
   }
@@ -36,6 +37,37 @@ var TodoListItem = React.createClass({
         <div>{this.props.todo.title}</div>
         <div>{this.props.todo.body}</div>
       </div>
+    );
+  }
+});
+
+var TodoForm = React.createClass({
+  getInitialState: function () {
+    return { title: "", body: ""};
+  },
+
+  updateBody: function (e) {
+    this.setState({body: e.currentTarget.value});
+  },
+
+  updateTitle: function (e) {
+    this.setState({title: e.currentTarget.value});
+  },
+
+  handleSubmit: function (e) {
+
+    e.preventDefault();
+    TodoStore.create({title: this.state.title, body: this.state.body, done: false});
+    this.setState({body: "", title: ""});
+  },
+
+  render: function () {
+    return (
+      <form onSubmit={this.handleSubmit}>
+        <input onChange={this.updateTitle}>{this.state.title}</input>
+        <input onChange={this.updateBody}>{this.state.body}</input>
+        <button>Submit</button>
+      </form>
     );
   }
 });
