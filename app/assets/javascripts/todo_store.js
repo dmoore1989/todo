@@ -67,16 +67,18 @@
 
   TodoStore.toggleDone = function(id) {
     var index = TodoStore.find(id);
+
     if (index !== -1){
-      currentTodo = todos[index];
-      currentTodo.done = !(_todos[index].done);
+      var currentTodo = _todos[index];
+      debugger
       $.ajax({
         url: "/api/todos/" + id,
         type: 'PATCH',
         dataType: 'json',
-        data: { todo: currentTodo },
+        data: { todo: {done:!(currentTodo.done) }},
         success: function(){
           TodoStore.changed();
+          currentTodo.done = !(currentTodo.done);
         }
       });
     }
@@ -85,12 +87,13 @@
 
 
   TodoStore.find = function(id){
-    _todos.forEach(function(todo, i) {
-      if (todo.id === id) {
-        return i;
+    var idx  = -1;
+    for (var i = 0; i < _todos.length; i++){
+      if (_todos[i].id === id){
+        idx = i;
       }
-    });
-    return -1;
+    }
+    return idx;
   };
 
 }(this));

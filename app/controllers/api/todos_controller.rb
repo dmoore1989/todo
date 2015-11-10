@@ -4,7 +4,7 @@ class Api::TodosController < ApplicationController
     render json: @todos.to_json
   end
 
-  def create!
+  def create
     @todo = Todo.new(todo_params)
     @todo.save!
     render json: @todo
@@ -15,13 +15,13 @@ class Api::TodosController < ApplicationController
     render json: @todo
   end
 
-  def update!
+  def update
     @todo = Todo.find(params[:id])
     @todo.update!(todo_params)
     render json: @todo
   end
 
-  def destroy!
+  def destroy
     @todo = Todo.find(params[:id])
     @todo.destroy!
   end
