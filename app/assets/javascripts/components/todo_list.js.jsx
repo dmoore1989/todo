@@ -23,8 +23,10 @@ var TodoList = React.createClass({
   render: function  () {
     return (
       <div>
+
         { (this.state.list.map(this.listTitles)) }
         < TodoForm />
+
       </div>
     );
   }
@@ -35,7 +37,7 @@ var TodoListItem = React.createClass({
     return {visible: false};
   },
 
-  revealBody: function () {
+  revealBody: function (e) {
     this.setState({visible: !(this.state.visible)});
   },
 
@@ -43,9 +45,9 @@ var TodoListItem = React.createClass({
     if (this.state.visible) {
       return (
         <div>
-          <div onClick={this.revealBody}>{this.props.todo.title}</div>
-          < TodoDetailView todo={this.props.todo}/>
+          <div id={this.props.todo.id} onClick={this.revealBody}>{this.props.todo.title}</div>
           < DoneButton todo={this.props.todo} />
+          < TodoDetailView todo={this.props.todo} />
         </div>
       );
     } else { return (
@@ -74,14 +76,15 @@ var TodoForm = React.createClass({
     e.preventDefault();
     TodoStore.create({title: this.state.title, body: this.state.body, done: false});
     this.setState({body: "", title: ""});
-    // debugger
   },
 
   render: function () {
     return (
       <form onSubmit={this.handleSubmit}>
-        <input onChange={this.updateTitle} value={this.state.title}/>
-        <input onChange={this.updateBody} value={this.state.body}/>
+        <label>Title
+        <input onChange={this.updateTitle} value={this.state.title}/></label>
+        <label>Body
+        <input onChange={this.updateBody} value={this.state.body}/></label>
         <button>Submit</button>
       </form>
     );
@@ -122,6 +125,7 @@ var TodoDetailView = React.createClass({
     );
   }
 });
+
 
 var TodoSteps = React.createClass({
   getInitialState: function() {
