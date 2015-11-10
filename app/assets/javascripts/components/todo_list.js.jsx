@@ -121,3 +121,14 @@ var TodoDetailView = React.createClass({
     );
   }
 });
+
+var TodoSteps = React.createClass({
+  
+  render: function () {
+    return(
+      <ul>
+        <li></li>
+      </ul>
+    );
+  }
+});
