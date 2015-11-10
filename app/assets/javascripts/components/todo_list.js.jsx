@@ -13,7 +13,7 @@ var TodoList = React.createClass({
   },
 
   listTitles: function (todo) {
-    return <li key={todo.id}>{todo.title}</li>;
+    return (<TodoListItem key={todo.id} todo={todo}/>);
   },
 
   todosChanged: function () {
@@ -22,9 +22,20 @@ var TodoList = React.createClass({
 
   render: function  () {
     return (
-      <ul>
+      <div>
         { (this.state.list.map(this.listTitles)) }
-      </ul>
+      </div>
+    );
+  }
+});
+
+var TodoListItem = React.createClass({
+  render: function() {
+    return (
+      <div>
+        <div>{this.props.todo.title}</div>
+        <div>{this.props.todo.body}</div>
+      </div>
     );
   }
 });
