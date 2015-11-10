@@ -70,7 +70,6 @@
 
     if (index !== -1){
       var currentTodo = _todos[index];
-      debugger
       $.ajax({
         url: "/api/todos/" + id,
         type: 'PATCH',
