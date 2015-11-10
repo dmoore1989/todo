@@ -138,7 +138,6 @@ var TodoSteps = React.createClass({
   },
 
   stepsChanged: function () {
-    debugger
     this.setState({ steps: StepStore.all(this.props.todo.id) });
   },
 
@@ -153,8 +152,12 @@ var TodoSteps = React.createClass({
       <div>
         <ul>
          {this.state.steps.map(function(step){
-          return (<li>{step.step}</li>);
-        })
+          return (<li>
+            {step.step}
+            < StepDeleteButton step={step}/>
+            < StepToggleButton step={step}/>
+            </li>);
+        }.bind(this))
         }
         </ul>
         < StepForm todo={this.props.todo} />
@@ -186,5 +189,34 @@ var StepForm = React.createClass({
         <button>Submit</button>
       </form>
     );
+  }
+});
+
+var StepDeleteButton = React.createClass({
+  handleDestroy: function (e) {
+    StepStore.destroy(this.props.step);
+  },
+
+  render: function () {
+    return <button onClick={this.handleDestroy}>Delete</button>;
+  }
+});
+
+var StepToggleButton = React.createClass({
+  getInitialState: function () {
+    return {done: this.props.step.done};
+  },
+
+  handleToggle: function (e) {
+    StepStore.toggleDone(this.props.step);
+    this.setState({done: !(this.state.done)});
+  },
+
+  stepDone: function(){
+    return (this.state.done) ? "Undo" : "Done";
+  },
+
+  render: function () {
+    return <button onClick={this.handleToggle}>{this.stepDone()}</button>;
   }
 });
