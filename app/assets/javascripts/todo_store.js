@@ -58,7 +58,7 @@
         type: 'DELETE',
         dataType: 'json',
         success: function(){
-          _todos.splice(id,1);
+          _todos.splice(index,1);
           TodoStore.changed();
         }
       });

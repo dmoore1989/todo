@@ -31,11 +31,16 @@ var TodoList = React.createClass({
 });
 
 var TodoListItem = React.createClass({
+  handleDestroy: function(e){
+    TodoStore.destroy(this.props.todo.id);
+  },
+
   render: function() {
     return (
       <div>
         <div>{this.props.todo.title}</div>
         <div>{this.props.todo.body}</div>
+        <button onClick={this.handleDestroy}>Delete</button>
       </div>
     );
   }
@@ -55,17 +60,17 @@ var TodoForm = React.createClass({
   },
 
   handleSubmit: function (e) {
-
     e.preventDefault();
     TodoStore.create({title: this.state.title, body: this.state.body, done: false});
     this.setState({body: "", title: ""});
+    // debugger
   },
 
   render: function () {
     return (
       <form onSubmit={this.handleSubmit}>
-        <input onChange={this.updateTitle}>{this.state.title}</input>
-        <input onChange={this.updateBody}>{this.state.body}</input>
+        <input onChange={this.updateTitle} value={this.state.title}/>
+        <input onChange={this.updateBody} value={this.state.body}/>
         <button>Submit</button>
       </form>
     );
