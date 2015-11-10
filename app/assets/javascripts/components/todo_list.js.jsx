@@ -17,7 +17,7 @@ var TodoList = React.createClass({
   },
 
   todosChanged: function () {
-      this.setState({ list: TodoStore.all() });
+    this.setState({ list: TodoStore.all() });
   },
 
   render: function  () {
@@ -31,19 +31,29 @@ var TodoList = React.createClass({
 });
 
 var TodoListItem = React.createClass({
-  handleDestroy: function(e){
-    TodoStore.destroy(this.props.todo.id);
+  getInitialState: function(){
+    return {visible: false};
+  },
+
+  revealBody: function () {
+    this.setState({visible: !(this.state.visible)});
   },
 
   render: function() {
-    return (
+    if (this.state.visible) {
+      return (
+        <div>
+          <div onClick={this.revealBody}>{this.props.todo.title}</div>
+          < TodoDetailView todo={this.props.todo}/>
+          < DoneButton todo={this.props.todo} />
+        </div>
+      );
+    } else { return (
       <div>
-        <div>{this.props.todo.title}</div>
-        <div>{this.props.todo.body}</div>
+        <div onClick={this.revealBody}>{this.props.todo.title}</div>
         < DoneButton todo={this.props.todo} />
-        <button onClick={this.handleDestroy}>Delete</button>
-      </div>
-    );
+      </div>);
+    }
   }
 });
 
@@ -79,23 +89,35 @@ var TodoForm = React.createClass({
 });
 
 var DoneButton = React.createClass({
-  getInitialState: function () {
-    return {done: this.props.todo.done};
-  },
 
   handleDone: function () {
     TodoStore.toggleDone(this.props.todo.id);
-    this.setState({done: !(this.props.todo.done)});
   },
 
   generateButtonText: function () {
-    var text = (this.state.done) ? "Undo" : "Done";
+    var text = (this.props.todo.done) ? "Undo" : "Done";
     return text;
   },
 
   render: function () {
     return (
       <button onClick={this.handleDone}>{this.generateButtonText()}</button>
+    );
+  }
+});
+
+var TodoDetailView = React.createClass({
+
+  handleDestroy: function(e){
+    TodoStore.destroy(this.props.todo.id);
+  },
+
+  render: function(){
+    return (
+      <div>
+        <div>{this.props.todo.body}</div>
+        <button onClick={this.handleDestroy}>Delete</button>
+      </div>
     );
   }
 });

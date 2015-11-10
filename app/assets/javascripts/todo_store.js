@@ -76,8 +76,8 @@
         dataType: 'json',
         data: { todo: {done:!(currentTodo.done) }},
         success: function(){
-          TodoStore.changed();
           currentTodo.done = !(currentTodo.done);
+          TodoStore.changed();
         }
       });
     }
