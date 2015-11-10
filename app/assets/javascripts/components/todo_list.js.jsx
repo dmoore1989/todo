@@ -116,6 +116,7 @@ var TodoDetailView = React.createClass({
     return (
       <div>
         <div>{this.props.todo.body}</div>
+        < TodoSteps todo={this.props.todo} />
         <button onClick={this.handleDestroy}>Delete</button>
       </div>
     );
@@ -123,12 +124,67 @@ var TodoDetailView = React.createClass({
 });
 
 var TodoSteps = React.createClass({
-  
+  getInitialState: function() {
+    return ({steps: []});
+  },
+
+  componentDidMount: function(){
+    StepStore.addChangedHandler(this.stepsChanged);
+    StepStore.fetch(this.props.todo.id);
+  },
+
+  componentWillUnmount: function() {
+    TodoStore.removeChangedHandler(this.stepsChanged);
+  },
+
+  stepsChanged: function () {
+    debugger
+    this.setState({ steps: StepStore.all(this.props.todo.id) });
+  },
+
+  renderSteps: function(){
+    return this.state.steps.map(function(step){
+      return (<li>{step.step}</li>);
+    });
+  },
+
   render: function () {
     return(
-      <ul>
-        <li></li>
-      </ul>
+      <div>
+        <ul>
+         {this.state.steps.map(function(step){
+          return (<li>{step.step}</li>);
+        })
+        }
+        </ul>
+        < StepForm todo={this.props.todo} />
+      </div>
+    );
+  }
+});
+
+var StepForm = React.createClass({
+  getInitialState: function () {
+    return { step: ""};
+  },
+
+
+  updateStep: function (e) {
+    this.setState({step: e.currentTarget.value});
+  },
+
+  handleSubmit: function (e) {
+    e.preventDefault();
+    StepStore.create({step: this.state.step, todo_id: this.props.todo.id, done: false});
+    this.setState({step: ""});
+  },
+
+  render: function () {
+    return (
+      <form onSubmit={this.handleSubmit}>
+        <input onChange={this.updateStep} value={this.state.step}/>
+        <button>Submit</button>
+      </form>
     );
   }
 });

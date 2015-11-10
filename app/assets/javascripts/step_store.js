@@ -31,7 +31,7 @@
       type: 'GET',
       dataType: 'json',
       success: function(data){
-        _steps[todoId] = data;
+        _steps[todoId] = (data);
         StepStore.changed();
       }
     });
@@ -44,7 +44,10 @@
       dataType: 'json',
       data: { step: step },
       success: function(data){
-        _steps[step.todo_id] = data;
+        if (_steps[step.todo_id] === null){
+          _steps[step.todo_id] = [];
+        }
+        _steps[step.todo_id].push(data);
         StepStore.changed();
       }
     });
@@ -85,7 +88,7 @@
 
 
 
-  TodoStore.find = function(step){
+  StepStore.find = function(step){
     var idx  = -1;
     var todoArray = _steps[step.todo_id];
     for (var i = 0; i < todoArray.length; i++){

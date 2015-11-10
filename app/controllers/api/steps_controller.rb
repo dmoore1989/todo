@@ -1,24 +1,24 @@
-class StepsController < ApplicationController
+class Api::StepsController < ApplicationController
   def index
     @steps = Todo.find(params[:todo_id]).steps
-    render :json: @todos:to_json
+    render json: @steps
   end
 
   def create
     @step = Step.new(step_params)
     @step.save!
-    render json: @step.to_json
+    render json: @step
   end
 
   def update
     @step = Step.find(params[:id])
     @step.update!(step_params)
-    render json: @step.to_json
+    render json: @step
   end
 
   def destroy
     @step = Step.find(params[:id])
-    render json: @todo.destroy!
+    render json: @step.destroy!
   end
 
   def step_params
